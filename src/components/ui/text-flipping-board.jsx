@@ -7,10 +7,10 @@ const FLAP_CHARS = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$()-+&=;:'\"%,./?°"
 const BOARD_ROWS = 6;
 const BOARD_COLS = 22;
 
-const BASE_COL_DELAY = 30;
-const BASE_ROW_DELAY = 20;
-const BASE_STEP_MS = 55;
-const BASE_FLIP_S = 0.35;
+const BASE_COL_DELAY = 18;
+const BASE_ROW_DELAY = 12;
+const BASE_STEP_MS = 42;
+const BASE_FLIP_S = 0.42;
 const BASE_TOTAL_S =
   ((BOARD_COLS - 1) * BASE_COL_DELAY +
     (BOARD_ROWS - 1) * BASE_ROW_DELAY +
@@ -63,8 +63,8 @@ const FlapCell = React.memo(
 
       const scrambleCount =
         normalized === " "
-          ? 8 + Math.floor(Math.random() * 8)
-          : 25 + Math.floor(Math.random() * 15);
+          ? 4 + Math.floor(Math.random() * 5)
+          : 12 + Math.floor(Math.random() * 8);
 
       const runStep = (i) => {
         const isLast = i === scrambleCount;
@@ -158,7 +158,7 @@ const FlapCell = React.memo(
               )}
               initial={{ rotateX: 0 }}
               animate={{ rotateX: -100 }}
-              transition={{ duration: flipDuration, ease: [0.55, 0.055, 0.675, 0.19] }}
+              transition={{ duration: flipDuration, ease: [0.4, 0, 0.2, 1] }}
             >
               <div className={cn(textCx, flapTextColor, "top-0 h-[200%]")} style={CELL_TEXT_STYLE}>
                 {showPrev}
@@ -182,7 +182,7 @@ const FlapCell = React.memo(
               )}
               initial={{ rotateX: 90 }}
               animate={{ rotateX: 0 }}
-              transition={{ duration: flipDuration * 0.85, delay: bottomDelay, ease: [0.33, 1.55, 0.64, 1] }}
+              transition={{ duration: flipDuration * 0.9, delay: bottomDelay, ease: [0.22, 1, 0.36, 1] }}
             >
               <div className={cn(textCx, textColor, "bottom-0 h-[200%]")} style={CELL_TEXT_STYLE}>
                 {show}

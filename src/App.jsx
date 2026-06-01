@@ -15,8 +15,6 @@ export default function App() {
   };
 
   const goToDashboard = () => setScreen('dashboard');
-  const goToIntro = () => setScreen('intro');
-
   return (
     <AnimatePresence mode="wait">
       {screen === 'intro' && (

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 // MediaPipe is loaded via CDN script tag in index.html — accessed inside useEffect
 
-const PoseDetector = ({ onPoseResults }) => {
+const PoseDetector = ({ onPoseResults, facingMode = 'user' }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const onPoseResultsRef = useRef(onPoseResults);
@@ -12,72 +12,7 @@ const PoseDetector = ({ onPoseResults }) => {
     onPoseResultsRef.current = onPoseResults;
   }, [onPoseResults]);
 
-  useEffect(() => {
-    let animationFrameId;
-    let currentStream;
-
-    // Defer reading window.Pose until inside useEffect (after CDN script has run)
-    const Pose = window.Pose;
-    const POSE_CONNECTIONS = window.POSE_CONNECTIONS;
-
-    if (!Pose) {
-      setError('MediaPipe failed to load. Check your internet connection and refresh.');
-      setIsLoading(false);
-      return;
-    }
-
-    const pose = new Pose({
-      locateFile: (file) =>
-        `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`,
-    });
-
-    pose.setOptions({
-      modelComplexity: 1,
-      smoothLandmarks: true,
-      minDetectionConfidence: 0.6,
-      minTrackingConfidence: 0.6,
-    });
-
-    pose.onResults((results) => {
-      setIsLoading(false);
-      drawSkeleton(results, POSE_CONNECTIONS);
-      if (onPoseResultsRef.current) onPoseResultsRef.current(results);
-    });
-
-    const startCamera = async () => {
-      try {
-        currentStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'user', width: 640, height: 480 },
-        });
-        if (videoRef.current) {
-          videoRef.current.srcObject = currentStream;
-          videoRef.current.play();
-
-          const processFrame = async () => {
-            if (videoRef.current && videoRef.current.readyState >= 2) {
-              await pose.send({ image: videoRef.current });
-            }
-            animationFrameId = requestAnimationFrame(processFrame);
-          };
-          processFrame();
-        }
-      } catch (err) {
-        setError('Camera access denied. Please allow camera permissions and refresh.');
-        setIsLoading(false);
-        console.error('Camera access denied or unavailable', err);
-      }
-    };
-
-    startCamera();
-
-    return () => {
-      if (animationFrameId) cancelAnimationFrame(animationFrameId);
-      if (currentStream) currentStream.getTracks().forEach(track => track.stop());
-      pose.close();
-    };
-  }, []);
-
-  const drawSkeleton = (results, POSE_CONNECTIONS) => {
+  function drawSkeleton(results, POSE_CONNECTIONS) {
     const canvas = canvasRef.current;
     if (!canvas || !videoRef.current) return;
     const ctx = canvas.getContext('2d');
@@ -110,7 +45,78 @@ const PoseDetector = ({ onPoseResults }) => {
         ctx.fill();
       }
     });
-  };
+  }
+
+  useEffect(() => {
+    let animationFrameId;
+    let currentStream;
+
+    // Defer reading window.Pose until inside useEffect (after CDN script has run)
+    const Pose = window.Pose;
+    const POSE_CONNECTIONS = window.POSE_CONNECTIONS;
+
+    if (!Pose) {
+      setTimeout(() => {
+        setError('MediaPipe failed to load. Check your internet connection and refresh.');
+        setIsLoading(false);
+      }, 0);
+      return;
+    }
+
+    const pose = new Pose({
+      locateFile: (file) =>
+        `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`,
+    });
+
+    pose.setOptions({
+      modelComplexity: 1,
+      smoothLandmarks: true,
+      minDetectionConfidence: 0.6,
+      minTrackingConfidence: 0.6,
+    });
+
+    pose.onResults((results) => {
+      setIsLoading(false);
+      drawSkeleton(results, POSE_CONNECTIONS);
+      if (onPoseResultsRef.current) onPoseResultsRef.current(results);
+    });
+
+    const startCamera = async () => {
+      try {
+        currentStream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: { ideal: facingMode },
+            width: { ideal: 640 },
+            height: { ideal: 480 },
+          },
+        });
+        if (videoRef.current) {
+          videoRef.current.srcObject = currentStream;
+          videoRef.current.play();
+
+          const processFrame = async () => {
+            if (videoRef.current && videoRef.current.readyState >= 2) {
+              await pose.send({ image: videoRef.current });
+            }
+            animationFrameId = requestAnimationFrame(processFrame);
+          };
+          processFrame();
+        }
+      } catch (err) {
+        setError('Camera access denied. Please allow camera permissions and refresh.');
+        setIsLoading(false);
+        console.error('Camera access denied or unavailable', err);
+      }
+    };
+
+    startCamera();
+
+    return () => {
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      if (currentStream) currentStream.getTracks().forEach(track => track.stop());
+      pose.close();
+    };
+  }, [facingMode]);
 
   if (error) {
     return (
@@ -135,4 +141,3 @@ const PoseDetector = ({ onPoseResults }) => {
 };
 
 export default PoseDetector;
-

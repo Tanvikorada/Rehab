@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale, LinearScale,
@@ -123,9 +123,8 @@ function ParticleCanvas() {
 function AnimatedNumber({ value }) {
   const [display, setDisplay] = useState(0);
   useEffect(() => {
-    let start = 0;
     const target = Number(value) || 0;
-    if (target === 0) { setDisplay(0); return; }
+    if (target === 0) return;
     const dur = 900;
     const startTime = Date.now();
     const tick = () => {
@@ -153,23 +152,6 @@ function addRipple(e, el) {
   el.appendChild(ripple);
   if (navigator.vibrate) navigator.vibrate(8);
   setTimeout(() => ripple.remove(), 600);
-}
-
-// ── Confetti ──────────────────────────────────────────────────────────────────
-function fireConfetti() {
-  for (let i = 0; i < 40; i++) {
-    const el = document.createElement('div');
-    el.style.cssText = `
-      position:fixed; pointer-events:none; z-index:9999;
-      left:${Math.random() * 100}%; top:-10px;
-      font-size:${Math.random() * 18 + 16}px;
-      animation: confettiFall ${Math.random() * 2 + 2}s ease forwards;
-      opacity:${Math.random() * 0.7 + 0.3};
-    `;
-    el.textContent = ['🎉','✨','⭐','🌟','💫','🎊'][Math.floor(Math.random() * 6)];
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), 4500);
-  }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "motion/react";
 import { TextFlippingBoard } from "./ui/text-flipping-board";
 
@@ -131,7 +131,7 @@ export default function IntroScreen({ onEnter }) {
   const next = useCallback(() => setMsgIdx((i) => (i + 1) % MESSAGES.length), []);
 
   useEffect(() => {
-    const id = setInterval(next, 5500);
+    const id = setInterval(next, 6500);
     return () => clearInterval(id);
   }, [next]);
 
@@ -148,7 +148,7 @@ export default function IntroScreen({ onEnter }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 0.98 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
           className="min-h-screen bg-[#080808] text-white overflow-x-hidden"
         >
           {/* ── Top Nav ── */}
@@ -170,7 +170,7 @@ export default function IntroScreen({ onEnter }) {
             <motion.div
               initial={{ opacity: 0, y: -16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.5 }}
+              transition={{ delay: 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
               className="text-center"
             >
               <p className="text-[10px] font-mono text-gray-500 tracking-[0.35em] uppercase mb-2">
@@ -188,17 +188,17 @@ export default function IntroScreen({ onEnter }) {
             <motion.div
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
+              transition={{ delay: 0.3, duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
               className="w-full"
             >
-              <TextFlippingBoard text={MESSAGES[msgIdx]} />
+              <TextFlippingBoard text={MESSAGES[msgIdx]} duration={2.4} />
             </motion.div>
 
             {/* CTA Button */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
+              transition={{ delay: 0.55, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
               className="flex flex-col items-center gap-3 w-full"
             >
               <button
