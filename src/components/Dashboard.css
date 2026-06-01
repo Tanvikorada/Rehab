@@ -1,0 +1,582 @@
+/* Dashboard.css — Keyframes and complex styles ported from HTML design */
+
+:root {
+  --primary-neon: #00FF88;
+  --secondary-lime: #AAFF00;
+  --dark-bg: #0a0e27;
+  --card-bg: rgba(20, 28, 50, 0.6);
+  --card-border: rgba(0, 255, 136, 0.1);
+  --text-primary: #ffffff;
+  --text-secondary: #b0b8d4;
+  --accent-red: #ff4757;
+  --accent-orange: #ffa502;
+  --accent-blue: #00d4ff;
+  --glow-green: 0 0 20px rgba(0, 255, 136, 0.3);
+  --glow-lime: 0 0 20px rgba(170, 255, 0, 0.3);
+  --glow-intense: 0 0 40px rgba(0, 255, 136, 0.6);
+}
+
+/* ── Layout ───────────────────────────────────────────────── */
+.db-root {
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0e27 0%, #0f1535 100%);
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.db-container {
+  padding: 16px;
+  padding-bottom: 100px;
+  opacity: 0;
+  animation: containerFadeIn 0.6s ease-out 0.1s forwards;
+}
+
+/* ── Keyframes ─────────────────────────────────────────────── */
+@keyframes containerFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cardSlideIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { filter: drop-shadow(0 0 6px rgba(0,255,136,0.4)); }
+  50%       { filter: drop-shadow(0 0 18px rgba(0,255,136,0.9)); }
+}
+
+@keyframes gradientShift {
+  0%   { left: -100%; }
+  50%  { left: 100%; }
+  100% { left: -100%; }
+}
+
+@keyframes statBoxBounce {
+  from { opacity: 0; transform: scale(0.82) translateY(16px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes statBoxGlow {
+  0%, 100% { opacity: 0; }
+  50%       { opacity: 1; }
+}
+
+@keyframes numberCountUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes numberPulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes scoreCircleScale {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes scoreGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(0,255,136,0.4); }
+  50%       { box-shadow: 0 0 40px rgba(0,255,136,0.9); }
+}
+
+@keyframes scoreGlowLime {
+  0%, 100% { box-shadow: 0 0 20px rgba(170,255,0,0.4); }
+  50%       { box-shadow: 0 0 40px rgba(170,255,0,0.9); }
+}
+
+@keyframes scoreGlowOrange {
+  0%, 100% { box-shadow: 0 0 20px rgba(255,165,2,0.4); }
+  50%       { box-shadow: 0 0 40px rgba(255,165,2,0.9); }
+}
+
+@keyframes ringFill {
+  from { stroke-dashoffset: 220; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes angleValuePulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.07); }
+}
+
+@keyframes angleGlow {
+  0%, 100% { opacity: 0; }
+  50%       { opacity: 1; }
+}
+
+@keyframes angleItemBounce {
+  from { opacity: 0; transform: scale(0.82) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes phasePulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 10px rgba(0,255,136,0.4); }
+  50%       { opacity: 0.7; box-shadow: 0 0 28px rgba(0,255,136,0.8); }
+}
+
+@keyframes phaseShimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  25%       { transform: scale(1.3); opacity: 0.7; }
+  50%       { transform: scale(1); opacity: 1; }
+  75%       { transform: scale(1.3); opacity: 0.7; }
+}
+
+@keyframes feedbackGlow {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes activityFillGrow {
+  from { height: 0; }
+}
+
+@keyframes activityShimmer {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes issueFillGrow {
+  from { width: 0 !important; }
+}
+
+@keyframes issueShimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(50px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-4px); }
+}
+
+@keyframes iconGlow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(0,255,136,0.3)); }
+  50%       { filter: drop-shadow(0 0 14px rgba(0,255,136,0.8)); }
+}
+
+@keyframes rippleEffect {
+  to { transform: scale(4); opacity: 0; }
+}
+
+@keyframes confettiFall {
+  to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+@keyframes scoreFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-4px); }
+}
+
+@keyframes exerciseCardSlide {
+  from { opacity: 0; transform: scale(0.9) translateY(16px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes textGlow {
+  0%, 100% { text-shadow: 0 0 5px rgba(0,255,136,0.3); }
+  50%       { text-shadow: 0 0 14px rgba(0,255,136,0.8); }
+}
+
+/* ── Cards ─────────────────────────────────────────────────── */
+.db-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  animation: cardSlideIn 0.6s cubic-bezier(0.34,1.56,0.64,1) backwards;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+.db-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0,255,136,0.15), transparent);
+  animation: gradientShift 4s infinite;
+  pointer-events: none;
+}
+
+.db-card:active { transform: scale(0.985); }
+
+.db-card-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 12px;
+}
+
+/* ── Stat boxes ────────────────────────────────────────────── */
+.db-stat-box {
+  background: rgba(0,255,136,0.05);
+  border: 2px solid rgba(0,255,136,0.15);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+  animation: statBoxBounce 0.7s cubic-bezier(0.34,1.56,0.64,1) backwards;
+}
+
+.db-stat-box::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at center, rgba(0,255,136,0.1), transparent);
+  opacity: 0;
+  animation: statBoxGlow 2.5s ease-in-out infinite;
+}
+
+.db-stat-box:active { transform: scale(1.04); background: rgba(0,255,136,0.15); }
+
+.db-stat-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--primary-neon);
+  font-family: 'Courier New', monospace;
+  animation: numberCountUp 0.8s ease-out backwards;
+}
+
+.db-stat-label {
+  font-size: 10px;
+  color: var(--text-secondary);
+  margin-top: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* ── Exercise cards ────────────────────────────────────────── */
+.db-exercise-card {
+  background: linear-gradient(135deg, rgba(0,255,136,0.08), rgba(170,255,0,0.05));
+  border: 2px solid rgba(0,255,136,0.2);
+  border-radius: 14px;
+  padding: 14px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  animation: exerciseCardSlide 0.7s cubic-bezier(0.34,1.56,0.64,1) backwards;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+.db-exercise-card:active { transform: scale(0.96); }
+
+.db-exercise-icon {
+  font-size: 26px;
+  margin-bottom: 6px;
+  animation: iconFloat 3s ease-in-out infinite;
+  display: inline-block;
+}
+
+.db-exercise-reps {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--secondary-lime);
+  font-family: 'Courier New', monospace;
+}
+
+/* ── Score circle ──────────────────────────────────────────── */
+.db-score-circle {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; font-weight: 700;
+  font-family: 'Courier New', monospace;
+  flex-shrink: 0;
+  animation: scoreCircleScale 0.8s cubic-bezier(0.34,1.56,0.64,1) 0.5s backwards;
+}
+
+.db-score-circle.excellent {
+  color: var(--primary-neon);
+  animation: scoreCircleScale 0.8s cubic-bezier(0.34,1.56,0.64,1) 0.5s backwards, scoreGlow 2s ease-in-out infinite;
+}
+
+.db-score-circle.good {
+  color: var(--secondary-lime);
+  animation: scoreCircleScale 0.8s cubic-bezier(0.34,1.56,0.64,1) 0.5s backwards, scoreGlowLime 2s ease-in-out infinite;
+}
+
+.db-score-circle.fair {
+  color: var(--accent-orange);
+  animation: scoreCircleScale 0.8s cubic-bezier(0.34,1.56,0.64,1) 0.5s backwards, scoreGlowOrange 2s ease-in-out infinite;
+}
+
+/* ── Angle items ───────────────────────────────────────────── */
+.db-angle-item {
+  background: rgba(0,255,136,0.05);
+  border: 2px solid rgba(0,255,136,0.15);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: angleItemBounce 0.7s cubic-bezier(0.34,1.56,0.64,1) backwards;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.db-angle-item::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at center, rgba(0,212,255,0.1), transparent);
+  opacity: 0;
+  animation: angleGlow 2s ease-in-out infinite;
+}
+
+.db-angle-value {
+  font-size: 20px; font-weight: 700;
+  color: var(--accent-blue);
+  font-family: 'Courier New', monospace;
+  margin-bottom: 3px;
+  animation: angleValuePulse 1.8s ease-in-out infinite;
+  display: block;
+}
+
+.db-angle-label {
+  font-size: 10px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* ── Phase dots ────────────────────────────────────────────── */
+.db-phase-dot {
+  flex: 1; height: 6px;
+  background: rgba(0,255,136,0.2);
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+
+.db-phase-dot::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(0,255,136,0.5), transparent);
+  animation: phaseShimmer 2.5s infinite;
+}
+
+.db-phase-dot.active {
+  background: var(--primary-neon);
+  animation: phasePulse 1.5s ease-in-out infinite;
+}
+
+/* ── Feedback box ──────────────────────────────────────────── */
+.db-feedback-box {
+  background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(0,255,136,0.05));
+  border: 2px solid rgba(0,212,255,0.3);
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.db-feedback-box::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(0,212,255,0.1), transparent);
+  animation: feedbackGlow 3s infinite;
+  pointer-events: none;
+}
+
+.db-feedback-dot {
+  width: 8px; height: 8px;
+  background: var(--accent-blue);
+  border-radius: 50%;
+  animation: heartbeat 1.4s ease-in-out infinite;
+}
+
+/* ── Activity bars ─────────────────────────────────────────── */
+.db-activity-bar {
+  width: 100%; height: 40px;
+  background: rgba(0,255,136,0.1);
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0,255,136,0.2);
+}
+
+.db-activity-fill {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(180deg, var(--primary-neon), var(--secondary-lime));
+  border-radius: 6px;
+  animation: activityFillGrow 1s cubic-bezier(0.34,1.56,0.64,1) backwards;
+}
+
+.db-activity-fill::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.3), transparent);
+  animation: activityShimmer 2s infinite;
+}
+
+/* ── Issue bars ────────────────────────────────────────────── */
+.db-issue-bar {
+  flex: 1; height: 24px;
+  background: rgba(0,255,136,0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(0,255,136,0.2);
+  position: relative;
+}
+
+.db-issue-fill {
+  height: 100%;
+  border-radius: 6px;
+  display: flex; align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+  position: relative;
+  animation: issueFillGrow 1s cubic-bezier(0.34,1.56,0.64,1) backwards;
+}
+
+.db-issue-fill::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: issueShimmer 2.5s infinite;
+}
+
+.db-issue-fill.high   { background: linear-gradient(90deg, #ff4757, #ff6b7a); }
+.db-issue-fill.medium { background: linear-gradient(90deg, #ffa502, #ffb84d); }
+.db-issue-fill.low    { background: linear-gradient(90deg, var(--secondary-lime), #c8ff00); }
+
+/* ── Session history ───────────────────────────────────────── */
+.db-session-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px;
+  background: rgba(0,255,136,0.05);
+  border-radius: 8px; margin-bottom: 8px;
+  border: 1px solid rgba(0,255,136,0.1);
+  transition: background 0.3s, transform 0.2s;
+}
+
+.db-session-item:active { background: rgba(0,255,136,0.15); transform: translateX(3px); }
+
+.db-session-score { animation: scoreFloat 2.5s ease-in-out infinite; }
+
+/* ── Bottom nav ────────────────────────────────────────────── */
+.db-bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  max-width: 430px; margin: 0 auto;
+  background: linear-gradient(180deg, rgba(10,14,39,0.8), rgba(10,14,39,0.97));
+  border-top: 2px solid rgba(0,255,136,0.2);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  display: flex; justify-content: space-around;
+  padding: 10px 0 max(10px, env(safe-area-inset-bottom));
+  z-index: 100;
+  animation: slideUp 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.3s backwards;
+}
+
+.db-nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  cursor: pointer; padding: 6px 14px; border-radius: 10px;
+  transition: background 0.3s; user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.db-nav-item:active { transform: scale(0.94); }
+.db-nav-item.active { background: rgba(0,255,136,0.15); }
+
+.db-nav-icon {
+  font-size: 20px;
+  animation: iconFloat 2.5s ease-in-out infinite;
+  display: inline-block;
+}
+
+.db-nav-item.active .db-nav-icon {
+  animation: iconFloat 2.5s ease-in-out infinite, iconGlow 2s ease-in-out infinite;
+}
+
+.db-nav-label { font-size: 10px; color: var(--text-secondary); transition: color 0.3s; }
+.db-nav-item.active .db-nav-label { color: var(--primary-neon); }
+
+/* ── Score ring ────────────────────────────────────────────── */
+.db-score-ring-fill {
+  stroke-dasharray: 220;
+  stroke-dashoffset: 220;
+  animation: ringFill 1.8s ease-out 0.6s forwards;
+}
+
+/* ── Ripple ────────────────────────────────────────────────── */
+.db-ripple {
+  position: absolute; border-radius: 50%;
+  background: rgba(0,255,136,0.4);
+  transform: scale(0);
+  animation: rippleEffect 0.6s ease-out forwards;
+  pointer-events: none;
+}
+
+/* ── Particle canvas ───────────────────────────────────────── */
+#db-particle-canvas {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; z-index: 0; opacity: 0.25;
+}
+
+/* ── Header title glow ─────────────────────────────────────── */
+.db-header-title {
+  font-size: 26px; font-weight: 700;
+  background: linear-gradient(135deg, var(--primary-neon), var(--secondary-lime));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+/* ── Score status text ─────────────────────────────────────── */
+.db-score-status { animation: textGlow 2.5s ease-in-out infinite; }
+
+/* ── Start session btn ─────────────────────────────────────── */
+.db-start-btn {
+  background: var(--primary-neon);
+  color: #000; font-weight: 700;
+  border: none; border-radius: 10px;
+  padding: 12px 20px; font-size: 13px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  cursor: pointer; width: 100%;
+  transition: background 0.2s, transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.db-start-btn:active { transform: scale(0.97); background: #00cc6e; }
+
+/* ── Tab content ───────────────────────────────────────────── */
+.db-tab { display: none; }
+.db-tab.active { display: block; animation: fadeInUp 0.4s ease-out; }

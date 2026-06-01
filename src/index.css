@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+/* Base reset for mobile-first app */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  background: #080808;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+/* Prevent horizontal scroll */
+body {
+  overflow-x: hidden;
+}
+
