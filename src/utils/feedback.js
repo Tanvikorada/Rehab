@@ -1,4 +1,5 @@
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_MODEL = 'llama-3.3-70b-versatile';
 
 /**
  * Generate coaching feedback from detected issues
@@ -40,14 +41,19 @@ export async function generateFeedback(issues, exerciseName, repCount) {
 
   // Use Groq only for complex feedback
   try {
+    const apiKey = import.meta.env.VITE_GROQ_API_KEY;
+    if (!apiKey) {
+      throw new Error('Missing VITE_GROQ_API_KEY');
+    }
+
     const response = await fetch(GROQ_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${import.meta.env.VITE_GROQ_API_KEY}`,
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
+        model: GROQ_MODEL,
         max_tokens: 60,
         messages: [
           {
@@ -65,8 +71,16 @@ export async function generateFeedback(issues, exerciseName, repCount) {
       }),
     });
 
+    if (!response.ok) {
+      throw new Error(`Groq request failed: ${response.status}`);
+    }
+
     const data = await response.json();
-    return data.choices[0].message.content.trim();
+    const cue = data?.choices?.[0]?.message?.content?.trim();
+    if (!cue) {
+      throw new Error('Groq response did not include a coaching cue');
+    }
+    return cue;
   } catch {
     return topIssue.message; // fallback to raw message
   }
