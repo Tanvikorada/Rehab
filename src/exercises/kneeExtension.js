@@ -39,7 +39,7 @@ export function analyzeKneeExtension(angles, prevAngles) {
   if (prevActiveHip && Math.abs(activeHip - prevActiveHip) > 10) {
     issues.push({
       severity: 'high',
-      message: 'Hip is compensating — keep your back flat against the chair',
+      message: 'Hip is compensating - keep your back flat against the chair',
       joint: 'hip',
     });
   }
@@ -50,7 +50,7 @@ export function analyzeKneeExtension(angles, prevAngles) {
     if (angleChange > 15) { // too fast for single frame
       issues.push({
         severity: 'low',
-        message: 'Slow down — control the movement throughout',
+        message: 'Slow down - control the movement throughout',
         joint: 'knee',
       });
     }

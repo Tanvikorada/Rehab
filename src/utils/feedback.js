@@ -25,14 +25,18 @@ export async function generateFeedback(issues, exerciseName, repCount) {
 
   // For simple issues, return pre-written responses (faster, no API call)
   const quickResponses = {
-    'Knees caving inward — push knees outward over your toes':
-      'Knees caving. Push them outward.',
-    'Squatting too deep for rehab — stop at 90°':
-      'Too deep. Control the descent — stop at 90°.',
-    'Hip is compensating — keep your back flat against the chair':
-      'Back is lifting. Press your back flat into the seat.',
-    'Slow down — control the movement throughout':
-      'Too fast. Slow and controlled — 2 seconds up, 2 seconds down.',
+    'Knees caving inward - push knees outward over your toes':
+      'Your knees are falling inward. Push both knees outward so they stay over your toes.',
+    'Squatting too deep for rehab - stop at 90 degrees':
+      'You are going too deep. Stop when your knees are about 90 degrees, then stand tall.',
+    'Weight shifting to one side - distribute weight evenly':
+      'Your weight is shifting to one side. Press both feet evenly into the floor.',
+    'Hip is compensating - keep your back flat against the chair':
+      'Your hip is lifting or twisting. Keep your back flat and move only from the knee.',
+    'Slow down - control the movement throughout':
+      'The movement is too fast. Use a slow 2 seconds up and 2 seconds down pace.',
+    'Arm is raised too high - stop at 90 degrees':
+      'Your arm is too high. Stop at shoulder height, then lower with control.',
   };
 
   if (quickResponses[topIssue.message]) {
@@ -59,8 +63,8 @@ export async function generateFeedback(issues, exerciseName, repCount) {
           {
             role: 'system',
             content: `You are a physiotherapist giving real-time coaching feedback.
-              Be direct, brief (under 12 words), encouraging but precise.
-              Never start with "I" or "You". Start with the correction.`,
+              Explain exactly what is wrong and how to fix it in one clear sentence.
+              Keep it under 22 words. Be encouraging, precise, and safe.`,
           },
           {
             role: 'user',

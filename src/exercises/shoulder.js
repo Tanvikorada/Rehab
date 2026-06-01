@@ -20,7 +20,7 @@ export function analyzeShoulderAbduction(angles, prevAngles, currentPhase) {
       issues.push({
         severity: 'medium',
         joint: 'shoulder',
-        message: 'Arm is raised too high — stop at 90°',
+        message: 'Arm is raised too high - stop at 90 degrees',
       });
     }
 

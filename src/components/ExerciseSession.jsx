@@ -3,18 +3,48 @@ import PoseDetector from './PoseDetector';
 import { getKeyAngles } from '../utils/angles';
 import { analyzeSquat, SQUAT_PHASES } from '../exercises/squat';
 import { analyzeKneeExtension } from '../exercises/kneeExtension';
-import { analyzeShoulderAbduction } from '../exercises/shoulder';
+import { analyzeShoulderAbduction, SHOULDER_PHASES } from '../exercises/shoulder';
 import { generateFeedback } from '../utils/feedback';
 import { saveSession } from '../utils/sessions';
 import './Dashboard.css';
 
 const EXERCISES = ['squat', 'knee-ext', 'shoulder'];
 const EXERCISE_LABELS = { squat: 'Squat', 'knee-ext': 'Knee Ext', shoulder: 'Shoulder' };
+const EXERCISE_GUIDES = {
+  squat: {
+    setup: 'Stand sideways or front-facing with your full body visible. Feet shoulder-width apart.',
+    steps: [
+      'Lower slowly by bending hips and knees together.',
+      'Keep knees tracking over your toes.',
+      'Stop around 90 degrees, then stand back up with control.',
+    ],
+  },
+  'knee-ext': {
+    setup: 'Sit tall on a chair with your back supported and both knees visible.',
+    steps: [
+      'Start with the knee bent near 90 degrees.',
+      'Straighten one leg until the knee is almost fully extended.',
+      'Lower slowly without lifting your hip or leaning back.',
+    ],
+  },
+  shoulder: {
+    setup: 'Stand or sit tall with your torso visible and arm at your side.',
+    steps: [
+      'Raise one arm out to the side with a soft elbow.',
+      'Stop at shoulder height, around 90 degrees.',
+      'Lower slowly without shrugging or twisting your trunk.',
+    ],
+  },
+};
+
+function initialPhaseForExercise(exercise) {
+  return exercise === 'shoulder' ? SHOULDER_PHASES.DOWN : SQUAT_PHASES.STANDING;
+}
 
 const ExerciseSession = ({ selectedExercise = 'squat', onGoToDashboard, onChangeExercise }) => {
-  const [feedback, setFeedback] = useState('Position yourself in frame');
+  const [feedback, setFeedback] = useState(EXERCISE_GUIDES[selectedExercise].setup);
   const [repCount, setRepCount] = useState(0);
-  const [phase, setPhase] = useState(SQUAT_PHASES.STANDING);
+  const [phase, setPhase] = useState(initialPhaseForExercise(selectedExercise));
   const [feedbackColor, setFeedbackColor] = useState('lime');
   const [activeExercise, setActiveExercise] = useState(selectedExercise);
   const [sessionStarted, setSessionStarted] = useState(false);
@@ -25,7 +55,7 @@ const ExerciseSession = ({ selectedExercise = 'squat', onGoToDashboard, onChange
   const sessionTimerRef = useRef(null);
   const sessionIssuesRef = useRef([]);
   const prevAnglesRef = useRef(null);
-  const phaseRef = useRef(SQUAT_PHASES.STANDING);
+  const phaseRef = useRef(initialPhaseForExercise(selectedExercise));
   const lastFeedbackTimeRef = useRef(0);
   const repCountRef = useRef(0);
   const sessionTimeRef = useRef(0);
@@ -52,6 +82,8 @@ const ExerciseSession = ({ selectedExercise = 'squat', onGoToDashboard, onChange
   const startSession = () => {
     if (!cameraFacing) return;
     setSessionStarted(true);
+    setFeedback(EXERCISE_GUIDES[activeExercise].steps[0]);
+    setFeedbackColor('lime');
     setRepCount(0);
     repCountRef.current = 0;
     setSessionTime(0);
@@ -87,9 +119,9 @@ const ExerciseSession = ({ selectedExercise = 'squat', onGoToDashboard, onChange
     setRepCount(0);
     repCountRef.current = 0;
     prevAnglesRef.current = null;
-    phaseRef.current = SQUAT_PHASES.STANDING;
-    setPhase(SQUAT_PHASES.STANDING);
-    setFeedback('Position yourself in frame');
+    phaseRef.current = initialPhaseForExercise(ex);
+    setPhase(initialPhaseForExercise(ex));
+    setFeedback(EXERCISE_GUIDES[ex].setup);
     sessionIssuesRef.current = [];
     if (sessionTimerRef.current) clearInterval(sessionTimerRef.current);
     setSessionStarted(false);
@@ -237,6 +269,19 @@ const ExerciseSession = ({ selectedExercise = 'squat', onGoToDashboard, onChange
             {sessionStarted ? 'LIVE COACH' : 'COACH'}
           </div>
           <div className="session-feedback-text">{feedback}</div>
+        </div>
+
+        <div className="db-card session-guide-card">
+          <div className="db-card-title">How to do it</div>
+          <p>{EXERCISE_GUIDES[activeExercise].setup}</p>
+          <div className="session-guide-steps">
+            {EXERCISE_GUIDES[activeExercise].steps.map((step, index) => (
+              <div key={step} className="session-guide-step">
+                <span>{index + 1}</span>
+                <p>{step}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
         {sessionStarted && (

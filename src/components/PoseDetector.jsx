@@ -6,6 +6,7 @@ const PoseDetector = ({ onPoseResults, facingMode = 'user' }) => {
   const canvasRef = useRef(null);
   const onPoseResultsRef = useRef(onPoseResults);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingMessage, setLoadingMessage] = useState('Opening camera...');
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -50,6 +51,11 @@ const PoseDetector = ({ onPoseResults, facingMode = 'user' }) => {
   useEffect(() => {
     let animationFrameId;
     let currentStream;
+    let stopped = false;
+    let isSendingFrame = false;
+    let lastPoseSend = 0;
+    let modelStarted = false;
+    let loadingTimer;
 
     // Defer reading window.Pose until inside useEffect (after CDN script has run)
     const Pose = window.Pose;
@@ -76,13 +82,27 @@ const PoseDetector = ({ onPoseResults, facingMode = 'user' }) => {
     });
 
     pose.onResults((results) => {
+      modelStarted = true;
       setIsLoading(false);
       drawSkeleton(results, POSE_CONNECTIONS);
       if (onPoseResultsRef.current) onPoseResultsRef.current(results);
     });
 
+    function drawCameraPreview() {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      if (!video || !canvas || video.readyState < 2) return;
+      const width = video.videoWidth || 640;
+      const height = video.videoHeight || 480;
+      if (canvas.width !== width) canvas.width = width;
+      if (canvas.height !== height) canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, width, height);
+    }
+
     const startCamera = async () => {
       try {
+        setLoadingMessage('Requesting camera permission...');
         currentStream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: { ideal: facingMode },
@@ -92,18 +112,46 @@ const PoseDetector = ({ onPoseResults, facingMode = 'user' }) => {
         });
         if (videoRef.current) {
           videoRef.current.srcObject = currentStream;
-          videoRef.current.play();
+          setLoadingMessage('Starting live preview...');
+          await videoRef.current.play();
+          drawCameraPreview();
+          setLoadingMessage('Starting pose tracking...');
 
-          const processFrame = async () => {
-            if (videoRef.current && videoRef.current.readyState >= 2) {
-              await pose.send({ image: videoRef.current });
+          loadingTimer = setTimeout(() => {
+            if (!stopped && !modelStarted) {
+              setIsLoading(false);
+            }
+          }, 6000);
+
+          const processFrame = () => {
+            if (stopped) return;
+            drawCameraPreview();
+            const now = performance.now();
+            if (
+              videoRef.current &&
+              videoRef.current.readyState >= 2 &&
+              !isSendingFrame &&
+              now - lastPoseSend > 80
+            ) {
+              isSendingFrame = true;
+              lastPoseSend = now;
+              pose.send({ image: videoRef.current })
+                .catch((err) => {
+                  console.warn('Pose frame skipped', err);
+                  if (!modelStarted) {
+                    setLoadingMessage('Still starting pose tracking...');
+                  }
+                })
+                .finally(() => {
+                  isSendingFrame = false;
+                });
             }
             animationFrameId = requestAnimationFrame(processFrame);
           };
           processFrame();
         }
       } catch (err) {
-        setError('Camera access denied. Please allow camera permissions and refresh.');
+        setError('Camera could not start. Allow camera permission, close other camera apps, then try again.');
         setIsLoading(false);
         console.error('Camera access denied or unavailable', err);
       }
@@ -112,6 +160,8 @@ const PoseDetector = ({ onPoseResults, facingMode = 'user' }) => {
     startCamera();
 
     return () => {
+      stopped = true;
+      if (loadingTimer) clearTimeout(loadingTimer);
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
       if (currentStream) currentStream.getTracks().forEach(track => track.stop());
       pose.close();
@@ -133,7 +183,7 @@ const PoseDetector = ({ onPoseResults, facingMode = 'user' }) => {
       {isLoading && (
         <div className="absolute inset-0 bg-gray-900 rounded-lg flex flex-col items-center justify-center gap-3">
           <div className="w-8 h-8 border-2 border-lime-400 border-t-transparent rounded-full animate-spin" />
-          <p className="text-gray-400 text-xs tracking-widest uppercase">Loading AI Model...</p>
+          <p className="text-gray-400 text-xs tracking-widest uppercase">{loadingMessage}</p>
         </div>
       )}
     </div>

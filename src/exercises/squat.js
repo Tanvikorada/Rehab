@@ -41,7 +41,7 @@ export function analyzeSquat(angles, prevAngles, phase) {
   if (kneeDifference > 15 && currentPhase !== SQUAT_PHASES.STANDING) {
     issues.push({
       severity: 'high',
-      message: 'Knees caving inward — push knees outward over your toes',
+      message: 'Knees caving inward - push knees outward over your toes',
       joint: 'knee',
     });
   }
@@ -50,7 +50,7 @@ export function analyzeSquat(angles, prevAngles, phase) {
   if (leftKnee < 75 || rightKnee < 75) {
     issues.push({
       severity: 'medium',
-      message: 'Squatting too deep for rehab — stop at 90°',
+      message: 'Squatting too deep for rehab - stop at 90 degrees',
       joint: 'knee',
     });
   }
@@ -60,7 +60,7 @@ export function analyzeSquat(angles, prevAngles, phase) {
   if (hipDifference > 20 && currentPhase === SQUAT_PHASES.BOTTOM) {
     issues.push({
       severity: 'medium',
-      message: 'Weight shifting to one side — distribute evenly',
+      message: 'Weight shifting to one side - distribute weight evenly',
       joint: 'hip',
     });
   }
