@@ -62,5 +62,9 @@ export function getKeyAngles(landmarks) {
     // Shoulder angles (arm abduction — 180 = arm up, 90 = arm out)
     leftShoulder: calculateAngle(lm[L.LEFT_ELBOW], lm[L.LEFT_SHOULDER], lm[L.LEFT_HIP]),
     rightShoulder: calculateAngle(lm[L.RIGHT_ELBOW], lm[L.RIGHT_SHOULDER], lm[L.RIGHT_HIP]),
+
+    // Elbow angles
+    leftElbow: calculateAngle(lm[L.LEFT_SHOULDER], lm[L.LEFT_ELBOW], lm[L.LEFT_WRIST]),
+    rightElbow: calculateAngle(lm[L.RIGHT_SHOULDER], lm[L.RIGHT_ELBOW], lm[L.RIGHT_WRIST]),
   };
 }

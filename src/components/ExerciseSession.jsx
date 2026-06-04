@@ -4,12 +4,14 @@ import { getKeyAngles } from '../utils/angles';
 import { analyzeSquat, SQUAT_PHASES } from '../exercises/squat';
 import { analyzeKneeExtension } from '../exercises/kneeExtension';
 import { analyzeShoulderAbduction, SHOULDER_PHASES } from '../exercises/shoulder';
+import { analyzeLunge, LUNGE_PHASES } from '../exercises/lunge';
+import { analyzeBicepCurl, BICEP_CURL_PHASES } from '../exercises/bicepCurl';
 import { generateFeedback } from '../utils/feedback';
 import { saveSession } from '../utils/sessions';
 import './Dashboard.css';
 
-const EXERCISES = ['squat', 'knee-ext', 'shoulder'];
-const EXERCISE_LABELS = { squat: 'Squat', 'knee-ext': 'Knee Ext', shoulder: 'Shoulder' };
+const EXERCISES = ['squat', 'knee-ext', 'shoulder', 'lunge', 'bicep-curl'];
+const EXERCISE_LABELS = { squat: 'Squat', 'knee-ext': 'Knee Ext', shoulder: 'Shoulder', lunge: 'Lunge', 'bicep-curl': 'Bicep Curl' };
 const EXERCISE_GUIDES = {
   squat: {
     setup: 'Stand sideways or front-facing with your full body visible. Feet shoulder-width apart.',
@@ -35,10 +37,29 @@ const EXERCISE_GUIDES = {
       'Lower slowly without shrugging or twisting your trunk.',
     ],
   },
+  lunge: {
+    setup: 'Stand sideways to the camera. Step one foot forward.',
+    steps: [
+      'Lower your hips until both knees are bent at a 90-degree angle.',
+      'Keep your front knee directly above your ankle.',
+      'Push back up to the starting position.',
+    ],
+  },
+  'bicep-curl': {
+    setup: 'Stand sideways or front-facing holding a weight. Arms fully extended.',
+    steps: [
+      'Curl the weight up towards your shoulder.',
+      'Keep your upper arm completely still and tucked by your side.',
+      'Lower the weight back down fully.',
+    ],
+  },
 };
 
 function initialPhaseForExercise(exercise) {
-  return exercise === 'shoulder' ? SHOULDER_PHASES.DOWN : SQUAT_PHASES.STANDING;
+  if (exercise === 'shoulder') return SHOULDER_PHASES.DOWN;
+  if (exercise === 'bicep-curl') return BICEP_CURL_PHASES.DOWN;
+  if (exercise === 'lunge') return LUNGE_PHASES.STANDING;
+  return SQUAT_PHASES.STANDING;
 }
 
 const ExerciseSession = ({ selectedExercise = 'squat', onGoToDashboard, onChangeExercise }) => {
@@ -146,6 +167,18 @@ const ExerciseSession = ({ selectedExercise = 'squat', onGoToDashboard, onChange
       analysis = analyzeKneeExtension(angles, prevAnglesRef.current);
     } else if (activeExercise === 'shoulder') {
       analysis = analyzeShoulderAbduction(angles, prevAnglesRef.current, phaseRef.current);
+      if (analysis.phase !== phaseRef.current) {
+        setPhase(analysis.phase);
+        phaseRef.current = analysis.phase;
+      }
+    } else if (activeExercise === 'lunge') {
+      analysis = analyzeLunge(angles, prevAnglesRef.current, phaseRef.current);
+      if (analysis.phase !== phaseRef.current) {
+        setPhase(analysis.phase);
+        phaseRef.current = analysis.phase;
+      }
+    } else if (activeExercise === 'bicep-curl') {
+      analysis = analyzeBicepCurl(angles, prevAnglesRef.current, phaseRef.current);
       if (analysis.phase !== phaseRef.current) {
         setPhase(analysis.phase);
         phaseRef.current = analysis.phase;

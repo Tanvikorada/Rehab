@@ -15,7 +15,7 @@ const MESSAGES = [
 // ── Stats ────────────────────────────────────────────────────────────────────
 const STATS = [
   { value: "33", label: "Landmarks" },
-  { value: "3",  label: "Exercises" },
+  { value: "5",  label: "Exercises" },
   { value: "0ms", label: "Lag" },
   { value: "₹0", label: "Cost" },
 ];
@@ -64,6 +64,20 @@ const EXERCISES = [
     tag: "SHOULDER REHAB",
     rules: ["Target 0–90°", "Elevation <15° shrug", "Elbow bend <15°"],
     color: "#a78bfa",
+  },
+  {
+    id: "lunge",
+    name: "Forward Lunge",
+    tag: "LOWER BODY REHAB",
+    rules: ["Front knee 70–100°", "Torso upright", "No valgus (knees caving)"],
+    color: "#ff007f",
+  },
+  {
+    id: "bicep-curl",
+    name: "Bicep Curl",
+    tag: "ARM REHAB",
+    rules: ["Full extension <140°", "Upper arm fixed", "No shoulder swing"],
+    color: "#facc15",
   },
 ];
 
